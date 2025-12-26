@@ -46,9 +46,12 @@ export async function updateSession(request: NextRequest) {
         data: { user },
     } = await supabase.auth.getUser()
 
+    // 3. Auth Guard - Update this based on your specific route protection needs
     if (
         !user &&
-        !request.nextUrl.pathname.startsWith('/auth')
+        (request.nextUrl.pathname.startsWith('/flux') ||
+            request.nextUrl.pathname.startsWith('/orbit') ||
+            request.nextUrl.pathname.startsWith('/prism'))
     ) {
         // no user, potentially respond by redirecting the user to the login page
         const url = request.nextUrl.clone()
@@ -56,5 +59,5 @@ export async function updateSession(request: NextRequest) {
         return NextResponse.redirect(url)
     }
 
-    return supabaseResponse
+    return response
 }
