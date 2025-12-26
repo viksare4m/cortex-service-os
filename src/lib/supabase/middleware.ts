@@ -51,7 +51,11 @@ export async function updateSession(request: NextRequest) {
         !user &&
         (request.nextUrl.pathname.startsWith('/flux') ||
             request.nextUrl.pathname.startsWith('/orbit') ||
-            request.nextUrl.pathname.startsWith('/prism'))
+            request.nextUrl.pathname.startsWith('/prism') ||
+            request.nextUrl.pathname.startsWith('/people') ||
+            request.nextUrl.pathname.startsWith('/vault') ||
+            request.nextUrl.pathname.startsWith('/nexus') ||
+            request.nextUrl.pathname.startsWith('/settings'))
     ) {
         // no user, potentially respond by redirecting the user to the login page
         const url = request.nextUrl.clone()
