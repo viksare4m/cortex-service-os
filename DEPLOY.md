@@ -30,10 +30,12 @@ Since I initialized the Git repo, you can simply push to GitHub/GitLab and conne
 
 1.  Go to [Supabase Dashboard](https://supabase.com/dashboard).
 2.  Create a new project.
-3.  Go to the **SQL Editor** in Supabase.
-4.  Copy the contents of `schema.sql` (located in the root or artifacts) and run it.
-5.  Get your **Project URL** and **Anon Key** from Project Settings > API.
-6.  Add them to your Vercel Environment Variables (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`).
+3.  Go to **Settings** > **API Keys**.
+4.  **IMPORTANT**: Look for the tab labeled **"Legacy anon, service_role API keys"** (next to "Publishable and secret API keys").
+5.  Click that tab to reveal your standard keys (they start with `eyJ...`).
+6.  Copy the `anon public` key.
+7.  Add it to Vercel Environment Variables as `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+    *   *Do NOT use the `sb_publishable_...` key, it will not work.*
 
 ## 3. Graph Layer (Neo4j)
 
