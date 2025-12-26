@@ -1,7 +1,11 @@
 import { login, signup } from "../actions"
-import { Terminal } from "lucide-react"
+import { Terminal, AlertTriangle } from "lucide-react"
 
-export default function LoginPage() {
+export default function LoginPage({
+    searchParams,
+}: {
+    searchParams: { message: string; error: string }
+}) {
     return (
         <div className="flex h-screen w-full items-center justify-center bg-background relative overflow-hidden">
             {/* Background ambient noise/gradient */}
@@ -48,6 +52,19 @@ export default function LoginPage() {
                             required
                         />
                     </div>
+
+                    {searchParams?.error && (
+                        <div className="p-3 rounded bg-destructive/10 border border-destructive/20 text-destructive text-sm flex items-center">
+                            <AlertTriangle className="w-4 h-4 mr-2" />
+                            {searchParams.error}
+                        </div>
+                    )}
+
+                    {searchParams?.message && (
+                        <div className="p-3 rounded bg-primary/10 border border-primary/20 text-primary text-sm flex items-center justify-center text-center">
+                            {searchParams.message}
+                        </div>
+                    )}
 
                     <div className="flex gap-4 pt-4">
                         <button
