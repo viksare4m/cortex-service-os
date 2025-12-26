@@ -37,6 +37,11 @@ Since I initialized the Git repo, you can simply push to GitHub/GitLab and conne
 7.  Add it to Vercel Environment Variables as `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
     *   *Do NOT use the `sb_publishable_...` key, it will not work.*
 
+7.  **CRITICAL**: Go to **Authentication** > **URL Configuration** in Supabase.
+    *   Set **Site URL** to your Vercel URL (e.g., `https://cortex-os.vercel.app`).
+    *   Add `https://cortex-os.vercel.app/auth/callback` to **Redirect URLs**.
+    *   *Without this, email links will redirect to localhost.*
+
 ## 3. Graph Layer (Neo4j)
 
 1.  Use **Neo4j AuraDB** (Free Tier) for a cloud instance.
