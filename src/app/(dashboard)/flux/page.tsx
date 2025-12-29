@@ -22,6 +22,7 @@ import {
 import { CSS } from '@dnd-kit/utilities'
 import { useState, useEffect } from "react"
 import { Database } from "@/types/database"
+import { Skeleton } from "@/components/ui/skeleton"
 
 type Task = Database['public']['Tables']['tasks']['Row']
 
@@ -72,7 +73,7 @@ function TaskCard({ task, isDragging }: { task: Task, isDragging?: boolean }) {
             {...listeners}
             className={cn(
                 "group bg-card border border-border p-4 rounded-lg shadow-sm hover:shadow-[0_0_15px_rgba(255,255,255,0.05)] transition-all cursor-grab active:cursor-grabbing",
-                "opacity-100" // Opacity handled by dnd-kit placeholder usually, but we keep it simple
+                isDragging ? "opacity-30 grayscale blur-[1px]" : "opacity-100"
             )}
         >
             <div className="flex justify-between items-start mb-2">
@@ -198,13 +199,41 @@ export default function FluxPage() {
             >
                 <div className="flex-1 overflow-x-auto pb-4">
                     <div className="flex h-full space-x-4 min-w-[1000px]">
-                        {COLUMNS.map((col) => (
-                            <KanbanColumn
-                                key={col.id}
-                                col={col}
-                                tasks={tasks.filter(t => t.status === col.id)}
-                            />
-                        ))}
+                        {COLUMNS.map((col) => {
+                            const columnTasks = tasks.filter(t => t.status === col.id)
+
+                            return (
+                                <div key={col.id} className="flex-1 min-w-[280px] flex flex-col">
+                                    {useFluxStore.getState().isLoading ? (
+                                        <div className={cn("flex-1 p-4 rounded-xl border border-border bg-card/50 space-y-4", col.color)}>
+                                            <div className="flex justify-between items-center mb-4">
+                                                <Skeleton className="h-4 w-20" />
+                                                <Skeleton className="h-4 w-6" />
+                                            </div>
+                                            {[1, 2, 3].map(i => (
+                                                <div key={i} className="bg-card border border-border p-4 rounded-lg space-y-3">
+                                                    <div className="flex justify-between">
+                                                        <Skeleton className="h-3 w-12" />
+                                                        <Skeleton className="h-4 w-4 rounded-full" />
+                                                    </div>
+                                                    <Skeleton className="h-4 w-full" />
+                                                    <Skeleton className="h-3 w-2/3" />
+                                                    <div className="flex justify-between mt-4">
+                                                        <Skeleton className="h-5 w-5 rounded-full" />
+                                                        <Skeleton className="h-3 w-8" />
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <KanbanColumn
+                                            col={col}
+                                            tasks={columnTasks}
+                                        />
+                                    )}
+                                </div>
+                            )
+                        })}
                     </div>
                 </div>
                 <DragOverlay>

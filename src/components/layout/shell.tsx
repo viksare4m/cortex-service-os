@@ -1,4 +1,5 @@
 import { AppSidebar } from "@/components/layout/app-sidebar"
+import { CommandPalette } from "@/components/layout/command-palette"
 
 interface ShellProps {
     children: React.ReactNode
@@ -7,6 +8,7 @@ interface ShellProps {
 export function Shell({ children }: ShellProps) {
     return (
         <div className="flex h-screen overflow-hidden bg-background text-foreground">
+            <CommandPalette />
             <AppSidebar />
             <main className="flex-1 overflow-y-auto overflow-x-hidden p-6 relative">
                 <div className="mx-auto max-w-7xl animate-in fade-in duration-500">

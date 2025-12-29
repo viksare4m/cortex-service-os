@@ -1,7 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
 import {
     Terminal,
@@ -16,22 +17,56 @@ import {
 
 const navItems = [
     {
-        name: "Flux", href: "/flux", icon: Layers, color: "text-primary", sub: [
+        name: "Flux", href: "/flux", icon: Layers, shortcut: "f", sub: [
             { name: "Kanban", href: "/flux" },
             { name: "Gantt", href: "/flux/gantt" },
             { name: "Gallery", href: "/flux/gallery" },
             { name: "Graph", href: "/flux/graph" },
         ]
     },
-    { name: "People", href: "/people", icon: Users },
-    { name: "Orbit", href: "/orbit", icon: Orbit },
-    { name: "Vault", href: "/vault", icon: Vault },
-    { name: "Nexus", href: "/nexus", icon: MessageSquare },
-    { name: "Prism", href: "/prism", icon: Activity },
+    { name: "People", href: "/people", icon: Users, shortcut: "p" },
+    { name: "Orbit", href: "/orbit", icon: Orbit, shortcut: "o" },
+    { name: "Vault", href: "/vault", icon: Vault, shortcut: "v" },
+    { name: "Nexus", href: "/nexus", icon: MessageSquare, shortcut: "n" },
+    { name: "Prism", href: "/prism", icon: Activity, shortcut: "x" },
 ]
 
 export function AppSidebar() {
     const pathname = usePathname()
+    const router = useRouter()
+    const [isGKeyDown, setIsGKeyDown] = useState(false)
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            // Check if user is typing in an input
+            if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
+
+            if (e.key.toLowerCase() === 'g') {
+                setIsGKeyDown(true)
+                // Reset after a delay if no second key is pressed
+                setTimeout(() => setIsGKeyDown(false), 1000)
+                return
+            }
+
+            if (isGKeyDown) {
+                const item = [
+                    ...navItems,
+                    { name: "Settings", href: "/settings", shortcut: "s" },
+                    { name: "Home", href: "/", shortcut: "h" }
+                ].find(
+                    (i) => i.shortcut === e.key.toLowerCase()
+                )
+                if (item) {
+                    e.preventDefault()
+                    router.push(item.href)
+                    setIsGKeyDown(false)
+                }
+            }
+        }
+
+        window.addEventListener('keydown', handleKeyDown)
+        return () => window.removeEventListener('keydown', handleKeyDown)
+    }, [isGKeyDown, router])
 
     return (
         <div className="flex flex-col h-full w-[250px] bg-card border-r border-border p-4 space-y-4">
@@ -62,7 +97,12 @@ export function AppSidebar() {
                                 )}
                             >
                                 <Icon className={cn("w-5 h-5 group-hover:scale-110 transition-transform", isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary")} />
-                                <span className="font-medium">{item.name}</span>
+                                <span className="font-medium flex-1">{item.name}</span>
+                                {item.shortcut && (
+                                    <span className="text-[10px] bg-muted/30 px-1.5 py-0.5 rounded font-mono text-muted-foreground group-hover:text-primary transition-colors uppercase">
+                                        G {item.shortcut}
+                                    </span>
+                                )}
                             </Link>
 
                             {/* Submenu */}
