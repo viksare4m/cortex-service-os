@@ -37,16 +37,45 @@ Since I initialized the Git repo, you can simply push to GitHub/GitLab and conne
 7.  Add it to Vercel Environment Variables as `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
     *   *Do NOT use the `sb_publishable_...` key, it will not work.*
 
-7.  **CRITICAL**: Go to **Authentication** > **URL Configuration** in Supabase.
+8.  **CRITICAL**: Go to **Authentication** > **URL Configuration** in Supabase.
     *   Set **Site URL** to your Vercel URL (e.g., `https://cortex-os.vercel.app`).
     *   Add `https://cortex-os.vercel.app/auth/callback` to **Redirect URLs**.
     *   *Without this, email links will redirect to localhost.*
 
-## 3. Graph Layer (Neo4j)
+## 3. Graph Layer (Neo4j AuraDB)
 
-1.  Use **Neo4j AuraDB** (Free Tier) for a cloud instance.
-2.  Get the `NEO4J_URI`, `NEO4J_USER`, and `NEO4J_PASSWORD`.
-3.  Add them to Vercel Environment Variables.
+1.  Go to [Neo4j AuraDB](https://aura.neo4j.io/) and create a free instance.
+2.  Copy the **Connection URI** (format: `neo4j+s://xxx.databases.neo4j.io`).
+3.  Save your **Username** (usually `neo4j`) and **Password**.
+4.  Add to Vercel Environment Variables:
+    *   `NEO4J_URI=neo4j+s://xxx.databases.neo4j.io`
+    *   `NEO4J_USER=neo4j`
+    *   `NEO4J_PASSWORD=your-password`
+
+## 4. AI Neural Engine (OpenAI)
+
+1.  Get your API key from [OpenAI Platform](https://platform.openai.com/api-keys).
+2.  Add to Vercel Environment Variables:
+    *   `OPENAI_API_KEY=sk-...`
+3.  The Neural Engine will now generate real AI insights in the PRISM dashboard.
+
+## 5. Environment Variables Summary
+
+In Vercel **Settings** > **Environment Variables**, add:
+
+```bash
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
+
+# Neo4j AuraDB
+NEO4J_URI=neo4j+s://xxx.databases.neo4j.io
+NEO4J_USER=neo4j
+NEO4J_PASSWORD=...
+
+# OpenAI
+OPENAI_API_KEY=sk-...
+```
 
 ---
-*System Ready for Launch.*
+**🚀 System Ready for Launch.**

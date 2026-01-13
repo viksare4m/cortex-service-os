@@ -1,30 +1,43 @@
 import { AgentCardProps } from "@/components/neural/agent-card"
 
-// Mock logic for the "Neural Mesh"
-// In a real implementation, this would run scheduled jobs against the Graph DB
-
+/**
+ * Neural Engine - Fetches AI-generated insights from the API
+ * This replaces the previous mock implementation with real OpenAI-powered analysis
+ */
 export async function generateInsights(): Promise<AgentCardProps[]> {
+    try {
+        const response = await fetch('/api/neural/insights', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            cache: 'no-store',
+        })
+
+        if (!response.ok) {
+            console.error('Failed to fetch insights:', response.statusText)
+            return getFallbackInsights()
+        }
+
+        const data = await response.json()
+        return data.insights || getFallbackInsights()
+    } catch (error) {
+        console.error('Neural engine error:', error)
+        return getFallbackInsights()
+    }
+}
+
+/**
+ * Fallback insights in case API fails
+ */
+function getFallbackInsights(): AgentCardProps[] {
     return [
         {
             type: 'scrum',
-            title: 'Velocity Drift Detected',
-            message: 'Team Alpha is trending 15% slower than estimated. Ticket #104 (Physics Engine) is the primary bottleneck.',
+            title: 'Neural Engine Offline',
+            message: 'AI insights are temporarily unavailable. Check your OPENAI_API_KEY configuration.',
             severity: 'warning',
-            timestamp: '10m ago'
-        },
-        {
-            type: 'producer',
-            title: 'Dependency Blockage',
-            message: 'Critical Path Alert: "Level 3 Environment" is blocked by "Tree Texture Pack" (Art). Expected delay: 2 days.',
-            severity: 'critical',
-            timestamp: '1h ago'
-        },
-        {
-            type: 'account',
-            title: 'Retainer Low',
-            message: 'Acme Corp has used 85% of their monthly retainer. Suggest scheduling an upsell meeting.',
-            severity: 'info',
-            timestamp: '3h ago'
+            timestamp: 'just now'
         }
     ]
 }
